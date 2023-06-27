@@ -22,7 +22,6 @@ const PIC_PERF_HOST = 'https://picperf.dev/';
 $absolutePath = realpath(dirname(__FILE__));
 
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
-require_once dirname(__FILE__) . '/vendor/autoload.php';
 
 $pluginData = get_plugin_data(__FILE__);
 
