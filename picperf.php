@@ -4,7 +4,7 @@
  * Plugin Name: PicPerf
  * Plugin URI: https://picperf.dev
  * Description: Automatic image optimization for the URLs you're already using.
- * Version: 0.0.1
+ * Version: 0.1.0
  * Author: Alex MacArthur
  * Author URI: https://macarthur.me
  * License: GPLv2 or later
@@ -30,6 +30,15 @@ define('PICPERF_PLUGIN_VERSION', $pluginData['Version']);
 require "$absolutePath/src/utils.php";
 require "$absolutePath/src/DomainValidator.php";
 require "$absolutePath/src/hooks/plugin-meta.php";
+
+add_filter('wp_get_attachment_image_attributes', function ($attr) {
+    if (is_admin()) {
+        return $attr;
+    }
+
+    $attr['src'] = transformUrl($attr['src']);
+    return $attr;
+}, 10);
 
 add_action('admin_notices', function () {
     $domainValidator = new DomainValidator(
