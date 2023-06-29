@@ -30,6 +30,7 @@ define('PICPERF_PLUGIN_VERSION', $pluginData['Version']);
 require "$absolutePath/src/utils.php";
 require "$absolutePath/src/DomainValidator.php";
 require "$absolutePath/src/hooks/plugin-meta.php";
+require "$absolutePath/src/hooks/update.php";
 
 add_filter('wp_get_attachment_image_attributes', function ($attr) {
     if (is_admin()) {
