@@ -4,7 +4,7 @@ namespace PicPerf;
 
 function logError($message)
 {
-    error_log('PicPerf Error: ' . $message);
+    error_log('PicPerf Error: '.$message);
 }
 
 function transformUrl($url)
@@ -22,7 +22,7 @@ function transformUrl($url)
             return $url;
         }
 
-        return PIC_PERF_HOST . $url;
+        return PIC_PERF_HOST.$url;
     } catch (\Exception $e) {
         logError("Failed to parse URL: $url");
 

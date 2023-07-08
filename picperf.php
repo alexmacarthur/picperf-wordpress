@@ -13,7 +13,7 @@
 
 namespace PicPerf;
 
-if (!defined('WPINC')) {
+if (! defined('WPINC')) {
     exit;
 }
 
@@ -21,7 +21,7 @@ const PIC_PERF_HOST = 'https://picperf.dev/';
 
 $absolutePath = realpath(dirname(__FILE__));
 
-require_once ABSPATH . 'wp-admin/includes/plugin.php';
+require_once ABSPATH.'wp-admin/includes/plugin.php';
 
 $pluginData = get_plugin_data(__FILE__);
 
@@ -38,8 +38,13 @@ add_filter('wp_get_attachment_image_attributes', function ($attr) {
     }
 
     $attr['src'] = transformUrl($attr['src']);
+
     return $attr;
 }, 10);
+
+add_filter('post_thumbnail_html', function ($html) {
+    return transformImageHtml($html);
+});
 
 add_action('admin_notices', function () {
     $domainValidator = new DomainValidator(
