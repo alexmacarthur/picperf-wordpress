@@ -13,7 +13,7 @@
 
 namespace PicPerf;
 
-if (!defined('WPINC')) {
+if (! defined('WPINC')) {
     exit;
 }
 
@@ -21,7 +21,7 @@ const PIC_PERF_HOST = 'https://picperf.dev/';
 
 $absolutePath = realpath(dirname(__FILE__));
 
-require_once ABSPATH . 'wp-admin/includes/plugin.php';
+require_once ABSPATH.'wp-admin/includes/plugin.php';
 
 $pluginData = get_plugin_data(__FILE__);
 
@@ -32,12 +32,26 @@ require "$absolutePath/src/DomainValidator.php";
 require "$absolutePath/src/hooks/plugin-meta.php";
 require "$absolutePath/src/hooks/update.php";
 
-add_filter("wp_get_attachment_image", function ($html) {
+add_filter('wp_get_attachment_image_src', function ($image) {
+    if (empty($image)) {
+        return $image;
+    }
+
+    $image[0] = transformUrl($image[0]);
+
+    return $image;
+}, 99);
+
+add_filter('wp_get_attachment_image', function ($html) {
     return transformImageHtml($html);
 }, 99);
 
 add_filter('post_thumbnail_html', function ($html) {
     return transformImageHtml($html);
+}, 99);
+
+add_filter('the_content', function ($content) {
+    return transformImageHtml($content);
 }, 99);
 
 add_action('admin_notices', function () {
@@ -62,7 +76,3 @@ add_action('admin_notices', function () {
         </div>
     <?php
 });
-
-add_filter('the_content', function ($content) {
-    return transformImageHtml($content);
-}, 99);
