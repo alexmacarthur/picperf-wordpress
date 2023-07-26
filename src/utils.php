@@ -12,6 +12,11 @@ function transformUrl($url)
     try {
         $parsedUrl = parse_url($url);
 
+        // It already starts with the PicPerf host.
+        if (strpos($url, PIC_PERF_HOST) === 0) {
+            return $url;
+        }
+
         // It's probably a relative path.
         if (empty($parsedUrl['host'])) {
             return $url;

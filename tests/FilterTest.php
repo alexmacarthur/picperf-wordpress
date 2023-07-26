@@ -24,6 +24,12 @@ it('transformUrl() transforms URL correctly', function () {
     expect($result)->toBe('https://picperf.dev/http://urmom.com/something.jpg');
 });
 
+it('transformUrl() does not transform a URL that is already transformed', function () {
+    $result = transformUrl('https://picperf.dev/http://urmom.com/something.jpg');
+
+    expect($result)->toBe('https://picperf.dev/http://urmom.com/something.jpg');
+});
+
 const IMAGE_MARKUP = '<img decoding="async" width="684" height="1024" src="https://urmom.com/wp-content/uploads/2023/06/trees-684x1024.png" alt="" class="wp-image-111" srcset="https://urmom.com/wp-content/uploads/2023/06/trees-684x1024.png 684w, https://urmom.com/wp-content/uploads/2023/06/trees-200x300.png 200w, https://urmom.com/wp-content/uploads/2023/06/trees-768x1150.png 768w, https://urmom.com/wp-content/uploads/2023/06/trees.png 800w" sizes="(max-width: 684px) 100vw, 684px">';
 
 it('transformImageHtml() transforms all URLs', function () {
