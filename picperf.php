@@ -76,3 +76,18 @@ add_action('admin_notices', function () {
         </div>
     <?php
 });
+
+add_action('admin_notices', function () {
+
+    if (! is_plugin_active('picperf-lite/picperf-lite.php')) {
+        return;
+    }
+
+    ?>
+        <div class="notice notice-error is-dismissible">
+            <p>
+                You're using the premium PicPerf plugin, but "PicPerf Lite" is still active. Please deactivate it to to prevent issues.
+            </p>
+        </div>
+    <?php
+});
