@@ -22,7 +22,11 @@ function modify_version_details_url($url, $path, $scheme)
 
 function remove_view_details_link($pluginMeta, $pluginFile, $remoteData, $status)
 {
-    if ($remoteData['slug'] === 'picperf') {
+    if (empty($remoteData)) {
+        return $pluginMeta;
+    }
+
+    if (($remoteData['slug'] ?? '') === 'picperf') {
         unset($pluginMeta[2]);
     }
 
@@ -59,7 +63,7 @@ function fetch_remote_data()
     // https://make.wordpress.org/core/2020/07/30/recommended-usage-of-the-updates-api-to-support-the-auto-updates-ui-for-plugins-and-themes-in-wordpress-5-5/
     return (object) [
         'id' => 'picperf/picperf.php',
-        'slug' => 'wp-typeit',
+        'slug' => 'picperf',
         'plugin' => 'picperf/picperf.php',
         'new_version' => $remoteData->version,
         'url' => 'https://picperf.dev',
