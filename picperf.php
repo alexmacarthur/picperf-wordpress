@@ -78,7 +78,6 @@ add_action('admin_notices', function () {
 });
 
 add_action('admin_notices', function () {
-
     if (! is_plugin_active('picperf-lite/picperf-lite.php')) {
         return;
     }
