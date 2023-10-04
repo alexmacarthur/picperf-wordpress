@@ -2,9 +2,11 @@
 
 namespace PicPerf;
 
+define('PICPERF_IMAGE_URL_PATTERN', '/(https?:\/\/[^\'"\s]+\.(png|jpe?g|gif|webp|avif))(?:\s+\d+)?/i');
+
 function logError($message)
 {
-    error_log('PicPerf Error: '.$message);
+    error_log('PicPerf Error: ' . $message);
 }
 
 function transformUrl($url)
@@ -27,7 +29,7 @@ function transformUrl($url)
             return $url;
         }
 
-        return PIC_PERF_HOST.$url;
+        return PIC_PERF_HOST . $url;
     } catch (\Exception $e) {
         logError("Failed to parse URL: $url");
 
@@ -38,10 +40,34 @@ function transformUrl($url)
 function transformImageHtml($content)
 {
     // Find every image tag.
-    return preg_replace_callback('/(<img)[^\>]*(\>|>)/i', function ($match) {
+    return preg_replace_callback('/(<img)[^\>]*(\>|>)/is', function ($match) {
 
         // Find every URL.
         return preg_replace_callback('/(https?:\/\/[^\'"\s]+)(?:\s+\d+)?/i', function ($subMatch) {
+            return transformUrl($subMatch[0]);
+        }, $match[0]);
+    }, $content);
+}
+
+function transformStyleTags($content)
+{
+    // Find every style tag.
+    return preg_replace_callback('/<style.*?>(.*?)<\/style>/is', function ($match) {
+
+        // Find every URL.
+        return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) {
+            return transformUrl($subMatch[0]);
+        }, $match[0]);
+    }, $content);
+}
+
+function transformInlineStyles($content)
+{
+    // Find every inline style.
+    return preg_replace_callback('/style=([\'"])(.*?)\1/is', function ($match) {
+
+        // Find every URL.
+        return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) {
             return transformUrl($subMatch[0]);
         }, $match[0]);
     }, $content);

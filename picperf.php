@@ -4,7 +4,7 @@
  * Plugin Name: PicPerf
  * Plugin URI: https://picperf.dev
  * Description: Automatic image optimization for the URLs you're already using.
- * Version: 0.2.2
+ * Version: 0.3.0
  * Author: Alex MacArthur
  * Author URI: https://macarthur.me
  * License: GPLv2 or later
@@ -13,7 +13,7 @@
 
 namespace PicPerf;
 
-if (! defined('WPINC')) {
+if (!defined('WPINC')) {
     exit;
 }
 
@@ -21,7 +21,7 @@ const PIC_PERF_HOST = 'https://picperf.dev/';
 
 $absolutePath = realpath(dirname(__FILE__));
 
-require_once ABSPATH.'wp-admin/includes/plugin.php';
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 $pluginData = get_plugin_data(__FILE__);
 
@@ -32,27 +32,32 @@ require "$absolutePath/src/DomainValidator.php";
 require "$absolutePath/src/hooks/plugin-meta.php";
 require "$absolutePath/src/hooks/update.php";
 
-add_filter('wp_get_attachment_image_src', function ($image) {
-    if (empty($image)) {
-        return $image;
-    }
+/**
+ * Capturing the output buffer allows us to transform the HTML before
+ * it's sent to the browser. It was intended to replace the following
+ * type of hooks:
+ * - wp_get_attachment_image_src
+ * - wp_get_attachment_image
+ * - post_thumbnail_html
+ * - the_content
+ */
 
-    $image[0] = transformUrl($image[0]);
+function buffer_callback($buffer)
+{
+    $buffer = transformStyleTags($buffer);
+    $buffer = transformImageHtml($buffer);
+    $buffer = transformInlineStyles($buffer);
 
-    return $image;
-}, 99);
+    return $buffer;
+}
 
-add_filter('wp_get_attachment_image', function ($html) {
-    return transformImageHtml($html);
-}, 99);
+add_action('wp_head', function () {
+    ob_start("PicPerf\buffer_callback");
+}, PHP_INT_MIN);
 
-add_filter('post_thumbnail_html', function ($html) {
-    return transformImageHtml($html);
-}, 99);
-
-add_filter('the_content', function ($content) {
-    return transformImageHtml($content);
-}, 99);
+add_action('wp_footer', function () {
+    ob_end_flush();
+}, PHP_INT_MAX);
 
 add_action('admin_notices', function () {
     $domainValidator = new DomainValidator(
@@ -78,7 +83,7 @@ add_action('admin_notices', function () {
 });
 
 add_action('admin_notices', function () {
-    if (! is_plugin_active('picperf-lite/picperf-lite.php')) {
+    if (!is_plugin_active('picperf-lite/picperf-lite.php')) {
         return;
     }
 
