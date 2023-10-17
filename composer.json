@@ -1,5 +1,5 @@
 {
-  "name": "alexmacarthur/picperf",
+  "name": "picperf/wordpress",
   "description": "Automatic image optimization for the URLs you already have.",
   "type": "wordpress-plugin",
   "version": "0.3.0",
