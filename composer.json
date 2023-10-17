@@ -1,7 +1,8 @@
 {
   "name": "alexmacarthur/picperf",
   "description": "Automatic image optimization for the URLs you already have.",
-  "type": "library",
+  "type": "wordpress-plugin",
+  "version": "0.3.0",
   "license": "GPL-2.0",
   "authors": [
     {
