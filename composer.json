@@ -3,7 +3,7 @@
   "description": "Automatic image optimization for the URLs you already have.",
   "type": "wordpress-plugin",
   "version": "0.3.0",
-  "license": "GPL-2.0",
+  "license": "GPL-2.0-only",
   "authors": [
     {
       "name": "Alex MacArthur",
@@ -16,5 +16,10 @@
     "pestphp/pest": "^2.8",
     "mockery/mockery": "^1.6",
     "laravel/pint": "^1.10"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   }
 }
