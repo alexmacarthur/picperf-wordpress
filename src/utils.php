@@ -2,7 +2,7 @@
 
 namespace PicPerf;
 
-define('PICPERF_IMAGE_URL_PATTERN', '/(https?:\/\/[^\'"\s]+\.(png|jpe?g|gif|webp|avif))(?:\s+\d+)?/i');
+define('PICPERF_IMAGE_URL_PATTERN', '/(?:https?:\/)?\/[^ ,]+\.(jpg|jpeg|png|gif|webp|avif)/i');
 
 function logError($message)
 {
@@ -43,7 +43,7 @@ function transformImageHtml($content)
     return preg_replace_callback('/(<img)[^\>]*(\>|>)/is', function ($match) {
 
         // Find every URL.
-        return preg_replace_callback('/(https?:\/\/[^\'"\s]+)(?:\s+\d+)?/i', function ($subMatch) {
+        return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) {
             return transformUrl($subMatch[0]);
         }, $match[0]);
     }, $content);
@@ -64,7 +64,7 @@ function transformStyleTags($content)
 function transformInlineStyles($content)
 {
     // Find every inline style.
-    return preg_replace_callback('/style=([\'"])(.*?)\1/is', function ($match) {
+    return preg_replace_callback('/style=(?:"|\')([^"]*)(?:"|\')/is', function ($match) {
 
         // Find every URL.
         return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) {

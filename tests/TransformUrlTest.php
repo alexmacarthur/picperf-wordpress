@@ -19,11 +19,11 @@ it('transformUrl() returns same URL on .test domain.', function () {
 it('transformUrl() transforms URL correctly', function () {
     $result = transformUrl('http://urmom.com/something.jpg');
 
-    expect($result)->toBe('https://picperf.dev/http://urmom.com/something.jpg');
+    expect($result)->toBe('https://picperf.io/http://urmom.com/something.jpg');
 });
 
 it('transformUrl() does not transform a URL that is already transformed', function () {
-    $result = transformUrl('https://picperf.dev/http://urmom.com/something.jpg');
+    $result = transformUrl('https://picperf.io/http://urmom.com/something.jpg');
 
-    expect($result)->toBe('https://picperf.dev/http://urmom.com/something.jpg');
+    expect($result)->toBe('https://picperf.io/http://urmom.com/something.jpg');
 });

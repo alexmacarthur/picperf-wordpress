@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: PicPerf
- * Plugin URI: https://picperf.dev
+ * Plugin URI: https://picperf.io
  * Description: Automatic image optimization for the URLs you're already using.
  * Version: 0.3.0
  * Author: Alex MacArthur
@@ -17,7 +17,7 @@ if (!defined('WPINC')) {
     exit;
 }
 
-const PIC_PERF_HOST = 'https://picperf.dev/';
+const PIC_PERF_HOST = 'https://picperf.io/';
 
 $absolutePath = realpath(dirname(__FILE__));
 
@@ -76,7 +76,7 @@ add_action('admin_notices', function () {
                 <br />
                 <br />
 
-                <a href="https://app.picperf.dev" target="_blank">Sign in to PicPerf</a>
+                <a href="https://app.picperf.io" target="_blank">Sign in to PicPerf</a>
             </p>
         </div>
     <?php

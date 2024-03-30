@@ -14,7 +14,7 @@ add_filter('self_admin_url', '\PicPerf\modify_version_details_url', 10, 3);
 function modify_version_details_url($url, $path, $scheme)
 {
     if (strpos($url, 'plugin=picperf') !== false) {
-        return 'https://picperf.dev/docs/wordpress#changelog';
+        return 'https://picperf.io/docs/wordpress#changelog';
     }
 
     return $url;
@@ -66,7 +66,7 @@ function fetch_remote_data()
         'slug' => 'picperf',
         'plugin' => 'picperf/picperf.php',
         'new_version' => $remoteData->version,
-        'url' => 'https://picperf.dev',
+        'url' => 'https://picperf.io',
         'package' => $remoteData->package,
         'icons' => [],
         'banners' => [],
@@ -79,7 +79,7 @@ function fetch_remote_data()
 
 function push_update($updatePluginsTransient)
 {
-    if (! is_object($updatePluginsTransient)) {
+    if (!is_object($updatePluginsTransient)) {
         return $updatePluginsTransient;
     }
 
@@ -87,11 +87,11 @@ function push_update($updatePluginsTransient)
 
     $pluginData = $checkPluginTransient ?: fetch_remote_data();
 
-    if (! $pluginData) {
+    if (!$pluginData) {
         return $updatePluginsTransient;
     }
 
-    if (! $checkPluginTransient) {
+    if (!$checkPluginTransient) {
         set_transient(
             PICPERF_UPDATE_CHECK_TRANSIENT,
             $pluginData,

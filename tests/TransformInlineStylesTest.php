@@ -7,10 +7,10 @@ require_once './src/utils.php';
 it('transformInlineStyles() converts image URLs', function () {
     $result = transformInlineStyles('<div style="background: url(\'https://whatever/img.jpeg\');">');
 
-    expect($result)->toBe('<div style="background: url(\'https://picperf.dev/https://whatever/img.jpeg\');">');
+    expect($result)->toBe('<div style="background: url(\'https://picperf.io/https://whatever/img.jpeg\');">');
 });
 
-it('transformInlineStyles() does not convert uknown file extensions.', function () {
+it('transformInlineStyles() does not convert unknown file extensions.', function () {
     $result = transformInlineStyles('<div style="background: url(\'https://whatever/img.does-not-exist\');">');
 
     expect($result)->toBe('<div style="background: url(\'https://whatever/img.does-not-exist\');">');

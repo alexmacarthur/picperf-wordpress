@@ -7,7 +7,7 @@ add_filter('plugin_row_meta', function ($plugin_meta, $plugin_file, $plugin_data
         return $plugin_meta;
     }
 
-    $plugin_meta[] = '<a target="_blank" rel="noopener noreferrer" href="https://picperf.dev/docs">View PicPerf\'s Documentation</a>';
+    $plugin_meta[] = '<a target="_blank" rel="noopener noreferrer" href="https://picperf.io/docs">View PicPerf\'s Documentation</a>';
 
     return $plugin_meta;
 }, 10, 4);
@@ -17,6 +17,6 @@ add_action('wp_head', function () {
     <!--
     This site's images are being automatically optimized, formatted, and aggressively cached by PicPerf.
 
-    https://picperf.dev
+    https://picperf.io
     -->\n\n";
 });
