@@ -2,6 +2,7 @@
 
 namespace PicPerf;
 
+require_once './tests/setup.php';
 require_once './src/utils.php';
 
 const PIC_PERF_HOST = 'https://picperf.io/';
@@ -30,4 +31,12 @@ it('transformImageHtml() does not transform local images', function () {
     $result = transformImageHtml("<img src='https://localhost.test/img.jpg' />");
 
     expect($result)->toBe("<img src='https://localhost.test/img.jpg' />");
+});
+
+describe('setting sitemap path', function () {
+    it('transforms URLs with sitemap path', function () {
+        $result = transformImageHtml(IMAGE_MARKUP, '/some/path');
+
+        expect($result)->toBe('<img decoding="async" width="684" height="1024" src="https://picperf.io/https://urmom.com/wp-content/uploads/2023/06/trees-684x1024.png?sitemap_path=/some/path" alt="" class="wp-image-111" srcset="https://picperf.io/https://urmom.com/wp-content/uploads/2023/06/trees-684x1024.png?sitemap_path=/some/path 684w, https://picperf.io/https://urmom.com/wp-content/uploads/2023/06/trees-200x300.png?sitemap_path=/some/path 200w, https://picperf.io/https://urmom.com/wp-content/uploads/2023/06/trees-768x1150.png?sitemap_path=/some/path 768w, https://picperf.io/https://urmom.com/wp-content/uploads/2023/06/trees.png?sitemap_path=/some/path 800w" sizes="(max-width: 684px) 100vw, 684px">');
+    });
 });

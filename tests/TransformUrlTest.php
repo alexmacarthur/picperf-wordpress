@@ -2,6 +2,7 @@
 
 namespace PicPerf;
 
+require_once './tests/setup.php';
 require_once './src/utils.php';
 
 it('transformUrl() returns same URL in local environment', function () {
@@ -26,4 +27,10 @@ it('transformUrl() does not transform a URL that is already transformed', functi
     $result = transformUrl('https://picperf.io/http://urmom.com/something.jpg');
 
     expect($result)->toBe('https://picperf.io/http://urmom.com/something.jpg');
+});
+
+it('transformUrl() adds sitemap path', function () {
+    $result = transformUrl('http://urmom.com/something.jpg', '/some/path');
+
+    expect($result)->toBe('https://picperf.io/http://urmom.com/something.jpg?sitemap_path=/some/path');
 });

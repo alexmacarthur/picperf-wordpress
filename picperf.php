@@ -27,6 +27,7 @@ $pluginData = get_plugin_data(__FILE__);
 
 define('PICPERF_PLUGIN_VERSION', $pluginData['Version']);
 
+require "$absolutePath/src/Config.php";
 require "$absolutePath/src/utils.php";
 require "$absolutePath/src/DomainValidator.php";
 require "$absolutePath/src/hooks/plugin-meta.php";
@@ -44,20 +45,38 @@ require "$absolutePath/src/hooks/update.php";
 
 function buffer_callback($buffer)
 {
-    $buffer = transformStyleTags($buffer);
-    $buffer = transformImageHtml($buffer);
-    $buffer = transformInlineStyles($buffer);
+    $sitemapPath = Config::getAddSitemapPath() === 'ALL' ? currentPagePath() : null;
+    $buffer = transformStyleTags($buffer, $sitemapPath);
+    $buffer = transformImageHtml($buffer, $sitemapPath);
+    $buffer = transformInlineStyles($buffer, $sitemapPath);
 
     return $buffer;
 }
 
+/**
+ * These hooks perform a global image URL transformation.
+ */
 add_action('wp_head', function () {
-    ob_start("PicPerf\buffer_callback");
+    if (Config::getTransformationScope() === 'ALL') {
+        ob_start("PicPerf\buffer_callback");
+    }
 }, PHP_INT_MIN);
 
 add_action('wp_footer', function () {
-    ob_end_flush();
+    if (Config::getTransformationScope() === 'ALL') {
+        ob_end_flush();
+    }
 }, PHP_INT_MAX);
+
+add_filter('the_content', function ($content) {
+    if (Config::getTransformationScope() !== 'CONTENT' && Config::getTransformationScope() !== 'ALL') {
+        return $content;
+    }
+
+    $sitemapPath = Config::getAddSitemapPath() === 'CONTENT' || Config::getAddSitemapPath() === 'ALL' ? currentPagePath() : null;
+
+    return transformImageHtml($content, $sitemapPath);
+});
 
 add_action('admin_notices', function () {
     $domainValidator = new DomainValidator(

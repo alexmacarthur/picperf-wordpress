@@ -1,8 +1,8 @@
 {
   "name": "picperf/wordpress",
-  "description": "Automatic image optimization for the URLs you already have.",
+  "description": "Drop-in image optimization for the modern web.",
   "type": "wordpress-plugin",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "GPL-2.0-only",
   "authors": [
     {
@@ -11,7 +11,6 @@
     }
   ],
   "minimum-stability": "stable",
-  "require": {},
   "require-dev": {
     "pestphp/pest": "^2.8",
     "mockery/mockery": "^1.6",

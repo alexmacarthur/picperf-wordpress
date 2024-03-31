@@ -9,7 +9,21 @@ function logError($message)
     error_log('PicPerf Error: ' . $message);
 }
 
-function transformUrl($url)
+function currentUrl()
+{
+    $protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
+    $host = $_SERVER['HTTP_HOST'];
+    $uri = $_SERVER['REQUEST_URI'];
+
+    return "$protocol://$host$uri";
+}
+
+function currentPagePath()
+{
+    return parse_url(currentUrl(), PHP_URL_PATH) ?? '/';
+}
+
+function pureTransform(string $url)
 {
     try {
         $parsedUrl = parse_url($url);
@@ -37,38 +51,53 @@ function transformUrl($url)
     }
 }
 
-function transformImageHtml($content)
+function transformUrl(string $url, $sitemapPath = null)
+{
+    $transformedUrl = pureTransform($url);
+
+    if (!empty($sitemapPath)) {
+        $withSitemapPath = add_query_arg(array(
+            'sitemap_path' => $sitemapPath,
+        ), $transformedUrl);
+
+        return str_replace('%2F', '/', $withSitemapPath);
+    }
+
+    return $transformedUrl;
+}
+
+function transformImageHtml($content, $sitemapPath = null)
 {
     // Find every image tag.
-    return preg_replace_callback('/(<img)[^\>]*(\>|>)/is', function ($match) {
+    return preg_replace_callback('/(<img)[^\>]*(\>|>)/is', function ($match) use ($sitemapPath) {
 
         // Find every URL.
-        return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) {
-            return transformUrl($subMatch[0]);
+        return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) use ($sitemapPath) {
+            return transformUrl($subMatch[0], $sitemapPath);
         }, $match[0]);
     }, $content);
 }
 
-function transformStyleTags($content)
+function transformStyleTags($content, $sitemapPath = null)
 {
     // Find every style tag.
-    return preg_replace_callback('/<style.*?>(.*?)<\/style>/is', function ($match) {
+    return preg_replace_callback('/<style.*?>(.*?)<\/style>/is', function ($match) use ($sitemapPath) {
 
         // Find every URL.
-        return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) {
-            return transformUrl($subMatch[0]);
+        return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) use ($sitemapPath) {
+            return transformUrl($subMatch[0], $sitemapPath);
         }, $match[0]);
     }, $content);
 }
 
-function transformInlineStyles($content)
+function transformInlineStyles($content, $sitemapPath = null)
 {
     // Find every inline style.
-    return preg_replace_callback('/style=(?:"|\')([^"]*)(?:"|\')/is', function ($match) {
+    return preg_replace_callback('/style=(?:"|\')([^"]*)(?:"|\')/is', function ($match) use ($sitemapPath) {
 
         // Find every URL.
-        return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) {
-            return transformUrl($subMatch[0]);
+        return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) use ($sitemapPath) {
+            return transformUrl($subMatch[0], $sitemapPath);
         }, $match[0]);
     }, $content);
 }
