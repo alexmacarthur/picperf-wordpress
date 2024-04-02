@@ -22,7 +22,35 @@ This plugin will automatically prefix every URL found in an image tag with the P
 
 ### Changing Transformation Scope
 
-If you'd like to disable universal URL transformations, you can set the `PICPERF_TRANSFORMATION_SCOPE` constant in your `wp-config.php` file to `null`. Setting it to `CONTENT` will cause only images rendered via the `the_content` filter to be transformed.
+If you'd like to disable universal URL transformations, you can set the `PICPERF_TRANSFORMATION_SCOPE` constant in your `wp-config.php` file to `null`. Setting it to `CONTENT` will cause only images rendered via the `the_content` filter to be transformed. For example:
+
+```php
+// Transform all images (default).
+define('PICPERF_TRANSFORMATION_SCOPE', 'ALL');
+
+// Only transform `the_content` images.
+define('PICPERF_TRANSFORMATION_SCOPE', 'CONTENT');
+
+// Transform no images.
+define('PICPERF_TRANSFORMATION_SCOPE', null);
+```
+
+### Using an Auto-Generated Image Sitemap
+
+When a `sitemap_path` query parameter is set on an image, PicPerf will automatically include it in an image sitemap generated for you. By default, no images are included in the sitemap. However, you can enable this by setting the `PICPERF_ADD_SITEMAP_PATH` constant.
+
+You
+
+```php
+// Include no images in sitemap (default).
+define('PICPERF_ADD_SITEMAP_PATH', null);
+
+// Only add `the_content` images to sitemap.
+define('PICPERF_ADD_SITEMAP_PATH', 'CONTENT');
+
+// Add all image so sitemap.
+define('PICPERF_ADD_SITEMAP_PATH', 'ALL');
+```
 
 ## Manually Transforming URLs
 
