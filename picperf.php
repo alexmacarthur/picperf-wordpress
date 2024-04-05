@@ -4,7 +4,7 @@
  * Plugin Name: PicPerf
  * Plugin URI: https://picperf.io
  * Description: Automatic image optimization for the URLs you're already using.
- * Version: 0.3.0
+ * Version: 0.5.0
  * Author: Alex MacArthur
  * Author URI: https://macarthur.me
  * License: GPLv2 or later
@@ -28,10 +28,12 @@ $pluginData = get_plugin_data(__FILE__);
 define('PICPERF_PLUGIN_VERSION', $pluginData['Version']);
 
 require "$absolutePath/src/Config.php";
+require "$absolutePath/src/SitemapService.php";
 require "$absolutePath/src/utils.php";
 require "$absolutePath/src/DomainValidator.php";
 require "$absolutePath/src/hooks/plugin-meta.php";
 require "$absolutePath/src/hooks/update.php";
+require "$absolutePath/src/hooks/sitemap.php";
 
 /**
  * Capturing the output buffer allows us to transform the HTML before

@@ -42,6 +42,8 @@ When a `sitemap_path` query parameter is set on an image, PicPerf will automatic
 You
 
 ```php
+<?php
+
 // Include no images in sitemap (default).
 define('PICPERF_ADD_SITEMAP_PATH', null);
 
@@ -50,6 +52,20 @@ define('PICPERF_ADD_SITEMAP_PATH', 'CONTENT');
 
 // Add all image so sitemap.
 define('PICPERF_ADD_SITEMAP_PATH', 'ALL');
+```
+
+## Auto-Registered Sitemap Endpoint
+
+By default, this plugin will register an image sitemap for your site at `https://ur-site.com/picperf/sitemap` and add a `<link>` tag to the `<head>` of your pages.
+
+All this endpoint does is proxy the auto-generated sitemap provided at `https://picperf.io/sitemap/ur-site.com`. The benefit is that search engines will be able to crawl and index it, since it'll be available through your domain (as set returned by the `get_site_url()` function).
+
+If you'd like to disable this endpoint, set the `PICPERF_DISABLE_SITEMAP` to `true`.
+
+```php
+<?php
+
+define('PICPERF_DISABLE_SITEMAP', true);
 ```
 
 ## Manually Transforming URLs
