@@ -6,7 +6,7 @@ define('PICPERF_IMAGE_URL_PATTERN', '/(?:https?:\/)?\/[^ ,]+\.(jpg|jpeg|png|gif|
 
 function logError($message)
 {
-    error_log('PicPerf Error: ' . $message);
+    error_log('PicPerf Error: '.$message);
 }
 
 function currentUrl()
@@ -43,7 +43,7 @@ function pureTransform(string $url)
             return $url;
         }
 
-        return PIC_PERF_HOST . $url;
+        return PIC_PERF_HOST.$url;
     } catch (\Exception $e) {
         logError("Failed to parse URL: $url");
 
@@ -55,10 +55,10 @@ function transformUrl(string $url, $sitemapPath = null)
 {
     $transformedUrl = pureTransform($url);
 
-    if (!empty($sitemapPath)) {
-        $withSitemapPath = add_query_arg(array(
+    if (! empty($sitemapPath)) {
+        $withSitemapPath = add_query_arg([
             'sitemap_path' => $sitemapPath,
-        ), $transformedUrl);
+        ], $transformedUrl);
 
         return str_replace('%2F', '/', $withSitemapPath);
     }
@@ -96,6 +96,16 @@ function transformInlineStyles($content, $sitemapPath = null)
     return preg_replace_callback('/style=(?:"|\')([^"]*)(?:"|\')/is', function ($match) use ($sitemapPath) {
 
         // Find every URL.
+        return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) use ($sitemapPath) {
+            return transformUrl($subMatch[0], $sitemapPath);
+        }, $match[0]);
+    }, $content);
+}
+
+function transformDataAttributes($content, $sitemapPath = null)
+{
+    return preg_replace_callback('/data-src=(?:"|\')([^"]*)(?:"|\')/is', function ($match) use ($sitemapPath) {
+
         return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) use ($sitemapPath) {
             return transformUrl($subMatch[0], $sitemapPath);
         }, $match[0]);

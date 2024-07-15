@@ -34,15 +34,15 @@ it('transformStyleTags() transforms all despite single or double quotes', functi
 });
 
 it('transformStyleTags() transforms URLs even when there are no quotes', function () {
-    $result = transformStyleTags("<style>body { background: url(https://urmom.com/something.jpg); }</style>");
+    $result = transformStyleTags('<style>body { background: url(https://urmom.com/something.jpg); }</style>');
 
-    expect($result)->toBe("<style>body { background: url(https://picperf.io/https://urmom.com/something.jpg); }</style>");
+    expect($result)->toBe('<style>body { background: url(https://picperf.io/https://urmom.com/something.jpg); }</style>');
 });
 
 it('transformStyleTags() preserves query params on images', function () {
-    $result = transformStyleTags("<style>body { background: url(https://urmom.com/something.jpg?hey=true); }</style>");
+    $result = transformStyleTags('<style>body { background: url(https://urmom.com/something.jpg?hey=true); }</style>');
 
-    expect($result)->toBe("<style>body { background: url(https://picperf.io/https://urmom.com/something.jpg?hey=true); }</style>");
+    expect($result)->toBe('<style>body { background: url(https://picperf.io/https://urmom.com/something.jpg?hey=true); }</style>');
 });
 
 describe('setting sitemap path', function () {

@@ -18,7 +18,7 @@ After you've created an account and added your domain, all you need to do is ins
 
 ## Usage
 
-This plugin will automatically prefix every URL found in an image tag with the PicPerf host, allowing it to be optimized, reformatted, and globally cached. By default, it'll impact every image that's rendered in the final HTML output of your page.
+This plugin will automatically prefix every URL found in images, style tags, inline styles, and data attributes with `https://picperf.io`, allowing it to be optimized, reformatted, and globally cached. By default, it'll impact every image that's rendered in the final HTML output of your page.
 
 ### Changing Transformation Scope
 

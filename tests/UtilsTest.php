@@ -21,8 +21,8 @@ afterEach(function () use ($originalHttpHost, $originalRequestUri, $originalHttp
     $_SERVER['HTTPS'] = $originalHttps;
 });
 
-describe("currentUrl()", function () {
-    it("returns the current URL", function () {
+describe('currentUrl()', function () {
+    it('returns the current URL', function () {
         $_SERVER['HTTP_HOST'] = 'localhost';
         $_SERVER['REQUEST_URI'] = '/some/path';
 
@@ -51,8 +51,8 @@ describe("currentUrl()", function () {
     });
 });
 
-describe("currentPagePath()", function () {
-    it("returns the current page path", function () {
+describe('currentPagePath()', function () {
+    it('returns the current page path', function () {
         $_SERVER['HTTP_HOST'] = 'localhost';
         $_SERVER['REQUEST_URI'] = '/some/path';
         $_SERVER['HTTPS'] = 'on';
@@ -62,7 +62,7 @@ describe("currentPagePath()", function () {
         expect($result)->toBe('/some/path');
     });
 
-    it("returns the current page path when no path is set", function () {
+    it('returns the current page path when no path is set', function () {
         $_SERVER['HTTP_HOST'] = 'localhost';
         $_SERVER['REQUEST_URI'] = '';
         $_SERVER['HTTPS'] = 'on';
@@ -72,7 +72,7 @@ describe("currentPagePath()", function () {
         expect($result)->toBe('/');
     });
 
-    it("returns the current page with root trailing slash", function () {
+    it('returns the current page with root trailing slash', function () {
         $_SERVER['HTTP_HOST'] = 'localhost';
         $_SERVER['REQUEST_URI'] = '/';
         $_SERVER['HTTPS'] = 'on';
