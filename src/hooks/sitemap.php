@@ -14,7 +14,7 @@ add_action('template_redirect', function () {
 
 add_action('wp_head', function () {
     $url = get_site_url();
-    $sitemapUrl = $url . SitemapService::SITEMAP_PATH;
+    $sitemapUrl = $url.SitemapService::SITEMAP_PATH;
 
     if (Config::shouldDisableSitemap()) {
         return;

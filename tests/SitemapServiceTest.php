@@ -30,7 +30,7 @@ it("serves sitemap when request path is '/picperf/sitemap'.", function () {
     expect(ob_get_clean())->toBe('sitemap content');
 });
 
-it("does not serve sitemap when sitemap is disabled.", function () {
+it('does not serve sitemap when sitemap is disabled.', function () {
     $sitemapService = $this->createPartialMock(SitemapService::class, ['fetchSitemap']);
     $sitemapService->expects($this->never())->method('fetchSitemap');
 

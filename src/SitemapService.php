@@ -19,7 +19,7 @@ class SitemapService
             return;
         }
 
-        if (!$url) {
+        if (! $url) {
             return;
         }
 
@@ -40,6 +40,6 @@ class SitemapService
 
     public function die()
     {
-        die();
+        exit();
     }
 }

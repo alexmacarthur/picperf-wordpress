@@ -79,7 +79,7 @@ function fetch_remote_data()
 
 function push_update($updatePluginsTransient)
 {
-    if (!is_object($updatePluginsTransient)) {
+    if (! is_object($updatePluginsTransient)) {
         return $updatePluginsTransient;
     }
 
@@ -87,11 +87,11 @@ function push_update($updatePluginsTransient)
 
     $pluginData = $checkPluginTransient ?: fetch_remote_data();
 
-    if (!$pluginData) {
+    if (! $pluginData) {
         return $updatePluginsTransient;
     }
 
-    if (!$checkPluginTransient) {
+    if (! $checkPluginTransient) {
         set_transient(
             PICPERF_UPDATE_CHECK_TRANSIENT,
             $pluginData,
