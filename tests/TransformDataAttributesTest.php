@@ -37,9 +37,9 @@ describe('transformDataAttributes()', function () {
     });
 
     it('does not transform other attributes that do not have an image in them', function () {
-        $result = transformDataAttributes('<div data-src="https://whatever.com/something.jpg" data-something-else="hello"></div>');
+        $result = transformDataAttributes('<div data-thumb="https://whatever.com/something.jpg" data-something-else="hello"></div>');
 
-        expect($result)->toBe('<div data-src="https://picperf.io/https://whatever.com/something.jpg" data-something-else="hello"></div>');
+        expect($result)->toBe('<div data-thumb="https://picperf.io/https://whatever.com/something.jpg" data-something-else="hello"></div>');
     });
 
     it('sets sitemap value when provided', function () {

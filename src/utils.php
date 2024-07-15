@@ -93,7 +93,7 @@ function transformStyleTags($content, $sitemapPath = null)
 function transformInlineStyles($content, $sitemapPath = null)
 {
     // Find every inline style.
-    return preg_replace_callback('/style=(?:"|\')([^"]*)(?:"|\')/is', function ($match) use ($sitemapPath) {
+    return preg_replace_callback('/(?<=style=["\'])(.*?)(?=["\'](?:\s|>))/is', function ($match) use ($sitemapPath) {
 
         // Find every URL.
         return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) use ($sitemapPath) {
@@ -104,7 +104,7 @@ function transformInlineStyles($content, $sitemapPath = null)
 
 function transformDataAttributes($content, $sitemapPath = null)
 {
-    return preg_replace_callback('/data-src=(?:"|\')([^"]*)(?:"|\')/is', function ($match) use ($sitemapPath) {
+    return preg_replace_callback('/data-[a-zA-Z0-9]+=(?:"|\')([^"]*)(?:"|\')/is', function ($match) use ($sitemapPath) {
 
         return preg_replace_callback(PICPERF_IMAGE_URL_PATTERN, function ($subMatch) use ($sitemapPath) {
             return transformUrl($subMatch[0], $sitemapPath);
