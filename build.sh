@@ -27,6 +27,7 @@ done
 cd ../picperf-build
 echo "Zipping..."
 zip -r "picperf.zip" ./picperf
+open .
 cd ../picperf-wordpress
 
 echo "Done!"
