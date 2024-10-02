@@ -73,7 +73,7 @@ function fetch_remote_data()
         'banners_rtl' => [],
         'tested' => '',
         'requires_php' => '7.2',
-        'compatibility' => new \stdClass(),
+        'compatibility' => new \stdClass,
     ];
 }
 

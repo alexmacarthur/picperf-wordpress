@@ -5,7 +5,7 @@ namespace PicPerf;
 add_action('template_redirect', function () {
     $requestPath = explode('?', $_SERVER['REQUEST_URI'])[0];
 
-    (new SitemapService())->serveSitemap(
+    (new SitemapService)->serveSitemap(
         $requestPath,
         get_site_url(),
         Config::shouldDisableSitemap()
