@@ -20,4 +20,25 @@ class Config
     {
         return defined('PICPERF_DISABLE_SITEMAP') && constant('PICPERF_DISABLE_SITEMAP') === true;
     }
+
+    public static function getCustomDomain(): ?string
+    {
+        $customDomain = get_option('picperf_custom_domain', '');
+
+        return $customDomain ? 'https://'.trim($customDomain).'/' : null;
+    }
+
+    public static function getProxyDomain(): string
+    {
+        $domain = get_option('picperf_proxy_domain', '');
+
+        if ($domain) {
+            return trim($domain);
+        }
+
+        $parsedUrl = parse_url(get_site_url());
+        $withWww = $parsedUrl['host'];
+
+        return preg_replace('/^www\./', '', $withWww);
+    }
 }

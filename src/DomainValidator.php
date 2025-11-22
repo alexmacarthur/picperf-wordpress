@@ -4,7 +4,7 @@ namespace PicPerf;
 
 class DomainValidator
 {
-    private $url;
+    private $domain;
 
     private $transientName;
 
@@ -12,37 +12,50 @@ class DomainValidator
 
     const ONE_DAY_IN_SECONDS = 86400;
 
-    public function __construct($url)
+    public function __construct()
     {
-        $this->url = $url;
-        $this->transientName = "picperf_domain_validation_{$this->getDomain()}";
+        $this->domain = Config::getProxyDomain() ?? $this->getDefaultDomain();
+        $this->transientName = "picperf_domain_validation_{$this->domain}";
     }
 
-    public function validate()
+    public function isActive(): bool
+    {
+        $validationResult = $this->validate();
+
+        return $validationResult->domainExists && $validationResult->isSubscribed;
+    }
+
+    public function domainExists(): bool
+    {
+        return $this->validate()->domainExists;
+    }
+
+    public function isSubscribed(): bool
+    {
+        return $this->validate()->isSubscribed;
+    }
+
+    private function validate(): object
     {
         $cachedValidationResult = get_transient($this->transientName);
 
         if ($cachedValidationResult !== false) {
-            return $this->isActiveFromJson($cachedValidationResult);
+            return json_decode($cachedValidationResult);
         }
 
         $rawValidationResult = $this->rawValidation();
 
-        if (empty($rawValidationResult)) {
-            return true;
-        }
-
         set_transient($this->transientName, $rawValidationResult, self::ONE_DAY_IN_SECONDS);
 
-        return $this->isActiveFromJson($rawValidationResult);
+        return json_decode($rawValidationResult);
     }
 
     private function rawValidation()
     {
-        $response = wp_remote_get(self::REMOTE_HOST.'/api/validate/domain/'.$this->getDomain());
+        $response = wp_remote_get(self::REMOTE_HOST.'/api/validate/domain/'.$this->domain);
 
         if (is_wp_error($response)) {
-            logError("Failed to validate domain: {$this->getDomain()}");
+            logError("Failed to validate domain: {$this->domain}");
 
             return null;
         }
@@ -50,23 +63,11 @@ class DomainValidator
         return $response['body'];
     }
 
-    private function isActiveFromJson($json): bool
+    private function getDefaultDomain()
     {
-        $result = json_decode($json);
+        $parsedUrl = parse_url(get_site_url());
+        $withWww = $parsedUrl['host'];
 
-        if (empty($result)) {
-            logError("Failed to parse JSON: $json");
-
-            return true;
-        }
-
-        return $result->isActive;
-    }
-
-    private function getDomain()
-    {
-        $parsedUrl = parse_url($this->url);
-
-        return $parsedUrl['host'];
+        return preg_replace('/^www\./', '', $withWww);
     }
 }

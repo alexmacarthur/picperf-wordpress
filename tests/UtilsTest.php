@@ -82,3 +82,61 @@ describe('currentPagePath()', function () {
         expect($result)->toBe('/');
     });
 });
+
+describe('prepareDomain()', function () {
+    it('removes protocol from domain', function () {
+        $result = prepareDomain('https://example.com/');
+
+        expect($result)->toBe('example.com');
+    });
+
+    it('removes trailing slash from domain', function () {
+        $result = prepareDomain('example.com/');
+
+        expect($result)->toBe('example.com');
+    });
+
+    it('handles domain without protocol or trailing slash', function () {
+        $result = prepareDomain('example.com');
+
+        expect($result)->toBe('example.com');
+    });
+
+    it('handles with www prefix', function () {
+        $result = prepareDomain('http://www.example.com/');
+
+        expect($result)->toBe('example.com');
+    });
+
+    it('handles subdomains', function () {
+        $result = prepareDomain('https://sub.example.com/');
+
+        expect($result)->toBe('sub.example.com');
+    });
+});
+
+describe('isValidDomain()', function () {
+    it('returns true for valid domain', function () {
+        $result = isValidDomain('example.com');
+
+        expect($result)->toBeTrue();
+    });
+
+    it('returns false for invalid domain', function () {
+        $result = isValidDomain('invalid_domain.. d dd..');
+
+        expect($result)->toBeFalse();
+    });
+
+    it('returns true for subdomain', function () {
+        $result = isValidDomain('sub.example.com');
+
+        expect($result)->toBeTrue();
+    });
+
+    it('returns false for empty string', function () {
+        $result = isValidDomain('');
+
+        expect($result)->toBeFalse();
+    });
+});

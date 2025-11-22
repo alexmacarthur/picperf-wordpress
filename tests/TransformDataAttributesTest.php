@@ -21,7 +21,7 @@ describe('transformDataAttributes()', function () {
     it('does not transform local URLs in data attribute on image tag', function () {
         $result = transformDataAttributes('<img data-src="https://localhost.test/img.jpg" />');
 
-        expect($result)->toBe('<img data-src="https://localhost.test/img.jpg" />');
+        expect($result)->toBe('<img data-src="https://localhost.test/img.jpg?picperf_local=true" />');
     });
 
     it('does not modify data attribute on source tag if it does not contain a URL', function () {

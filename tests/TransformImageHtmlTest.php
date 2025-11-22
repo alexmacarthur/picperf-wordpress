@@ -30,7 +30,7 @@ it('transformImageHtml() does not transform relative images', function () {
 it('transformImageHtml() does not transform local images', function () {
     $result = transformImageHtml("<img src='https://localhost.test/img.jpg' />");
 
-    expect($result)->toBe("<img src='https://localhost.test/img.jpg' />");
+    expect($result)->toBe("<img src='https://localhost.test/img.jpg?picperf_local=true' />");
 });
 
 describe('setting sitemap path', function () {

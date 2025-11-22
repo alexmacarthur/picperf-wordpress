@@ -4,7 +4,7 @@
  * Plugin Name: PicPerf
  * Plugin URI: https://picperf.io
  * Description: Automatic image optimization for the URLs you're already using.
- * Version: 0.6.1
+ * Version: 1.0.0
  * Author: Alex MacArthur
  * Author URI: https://macarthur.me
  * License: GPLv2 or later
@@ -30,10 +30,38 @@ define('PICPERF_PLUGIN_VERSION', $pluginData['Version']);
 require "$absolutePath/src/Config.php";
 require "$absolutePath/src/SitemapService.php";
 require "$absolutePath/src/utils.php";
+require "$absolutePath/src/Translation.php";
 require "$absolutePath/src/DomainValidator.php";
 require "$absolutePath/src/hooks/plugin-meta.php";
 require "$absolutePath/src/hooks/update.php";
 require "$absolutePath/src/hooks/sitemap.php";
+require "$absolutePath/menu.php";
+
+function mt_make_url_root_relative($url)
+{
+    $home = home_url('/');
+
+    // Normalize
+    $url = trim($url);
+    $home = rtrim($home, '/').'/';
+
+    // Only touch URLs on this site
+    if (strpos($url, $home) === 0) {
+        $relative = '/'.ltrim(substr($url, strlen($home)), '/');
+
+        return $relative;
+    }
+
+    return $url;
+}
+
+add_filter('wp_get_attachment_image_src', function ($image, $attachment_id, $size, $icon) {
+    if (is_array($image) && ! empty($image[0])) {
+        $image[0] = mt_make_url_root_relative($image[0]);
+    }
+
+    return $image;
+}, 10, 4);
 
 /**
  * Capturing the output buffer allows us to transform the HTML before
@@ -85,7 +113,7 @@ add_action('admin_notices', function () {
         get_site_url()
     );
 
-    if ($domainValidator->validate()) {
+    if ($domainValidator->isActive() || isPluginSettingsPage()) {
         return;
     }
 
@@ -97,7 +125,7 @@ add_action('admin_notices', function () {
                 <br />
                 <br />
 
-                <a href="https://app.picperf.io" target="_blank">Sign in to PicPerf</a>
+                <a href="<?php echo menu_page_url('picperf-settings', false); ?>" target="_blank">Go to PicPerf Settings</a>
             </p>
         </div>
     <?php
