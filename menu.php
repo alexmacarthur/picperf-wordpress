@@ -192,6 +192,7 @@ function renderSettingsPage()
             display: grid;
             gap: 12px;
             grid-template-columns: repeat(2, minmax(0, 520px));
+            margin-top: 12px;
 
             @media screen and (max-width: 782px) {
                 grid-template-columns: 1fr;
