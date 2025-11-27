@@ -7,7 +7,6 @@ add_action('template_redirect', function () {
 
     (new SitemapService)->serveSitemap(
         $requestPath,
-        get_site_url(),
         Config::shouldDisableSitemap()
     );
 }, 0);

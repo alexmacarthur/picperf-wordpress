@@ -4,7 +4,7 @@
  * Plugin Name: PicPerf
  * Plugin URI: https://picperf.io
  * Description: Automatic image optimization for the URLs you're already using.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Alex MacArthur
  * Author URI: https://macarthur.me
  * License: GPLv2 or later

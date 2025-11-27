@@ -30,3 +30,10 @@ if (! function_exists('get_option')) {
         return $default;
     }
 }
+
+if (! function_exists('get_site_url')) {
+    function get_site_url()
+    {
+        return 'http://example.com';
+    }
+}

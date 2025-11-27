@@ -8,7 +8,6 @@ class SitemapService
 
     public function serveSitemap(
         string $requestPath,
-        string $url,
         bool $shouldDisableSitemap
     ) {
         if ($shouldDisableSitemap) {
@@ -19,14 +18,8 @@ class SitemapService
             return;
         }
 
-        if (! $url) {
-            return;
-        }
-
-        $host = parse_url($url)['host'];
-
         header('Content-Type: application/xml; charset=utf-8');
-        echo $this->fetchSitemap($host);
+        echo $this->fetchSitemap(Config::getProxyDomain());
 
         $this->die();
     }
