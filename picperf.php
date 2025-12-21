@@ -4,7 +4,7 @@
  * Plugin Name: PicPerf
  * Plugin URI: https://picperf.io
  * Description: Automatic image optimization for the URLs you're already using.
- * Version: 1.0.1
+ * Version: 1.2.0
  * Author: Alex MacArthur
  * Author URI: https://macarthur.me
  * License: GPLv2 or later
@@ -29,6 +29,7 @@ define('PICPERF_PLUGIN_VERSION', $pluginData['Version']);
 
 require "$absolutePath/src/Config.php";
 require "$absolutePath/src/SitemapService.php";
+require "$absolutePath/src/CustomDomainService.php";
 require "$absolutePath/src/utils.php";
 require "$absolutePath/src/Translation.php";
 require "$absolutePath/src/DomainValidator.php";

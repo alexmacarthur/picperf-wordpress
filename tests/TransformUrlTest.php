@@ -61,4 +61,18 @@ describe('custom domain', function () {
 
         expect($result)->toBe('https://custom.urmom.com/http://example.com/image.jpg');
     });
+
+    describe('when proxy domain is hidden', function () {
+        beforeEach(function () {
+            global $_test_options;
+            $_test_options['picperf_associated_proxied_domain'] = 'example.com';
+            $_test_options['picperf_hide_proxied_domain'] = true;
+        });
+
+        it('transformUrl() removes proxy domain from URL before transforming', function () {
+            $result = transformUrl('http://example.com/image.jpg');
+
+            expect($result)->toBe('https://custom.urmom.com/image.jpg');
+        });
+    });
 });

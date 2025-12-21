@@ -37,9 +37,17 @@ function currentPagePath()
     return parse_url(currentUrl(), PHP_URL_PATH) ?? '/';
 }
 
+function removeDomain(string $domain, string $url): string
+{
+    $preparedDomain = prepareDomain($domain);
+
+    return preg_replace("/^https?:\/\/(www\.)?{$preparedDomain}(:\d+)?/", '', $url);
+}
+
 function pureTransform(string $url)
 {
     try {
+
         $derivedHost = deriveHost();
         $parsedUrl = parse_url($url);
 
@@ -53,10 +61,16 @@ function pureTransform(string $url)
             return $url;
         }
 
-        // It's probably a local image.
+        // // It's probably a local image.
         if (preg_match("/localhost|\.test$/", $parsedUrl['host'])) {
             return applyLocalParameter($url);
         }
+
+        $url = Config::shouldHideProxyDomain()
+            ? removeDomain(Config::getProxyDomain(), $url)
+            : $url;
+
+        $url = ltrim($url, '/');
 
         return $derivedHost.$url;
     } catch (\Exception $e) {

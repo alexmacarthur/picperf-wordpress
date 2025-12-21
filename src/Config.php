@@ -4,6 +4,8 @@ namespace PicPerf;
 
 class Config
 {
+    const REMOTE_HOST = 'https://go.picperf.io';
+
     public static function getAddSitemapPath(): string
     {
         // 'ALL' or 'CONTENT'
@@ -14,6 +16,17 @@ class Config
     {
         // 'ALL' or 'CONTENT'
         return defined('PICPERF_TRANSFORMATION_SCOPE') ? constant('PICPERF_TRANSFORMATION_SCOPE') : 'ALL';
+    }
+
+    public static function shouldHideProxyDomain(): bool
+    {
+        if (! self::getAssociatedProxiedDomain()) {
+            return false;
+        }
+
+        $shouldHide = get_option('picperf_hide_proxied_domain', false);
+
+        return in_array($shouldHide, [true, '1', 1], true);
     }
 
     public static function shouldDisableSitemap(): bool
@@ -40,5 +53,10 @@ class Config
         $withWww = $parsedUrl['host'];
 
         return preg_replace('/^www\./', '', $withWww);
+    }
+
+    public static function getAssociatedProxiedDomain(): string
+    {
+        return get_option('picperf_associated_proxied_domain', '');
     }
 }

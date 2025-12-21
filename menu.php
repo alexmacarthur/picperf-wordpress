@@ -34,7 +34,24 @@ add_action('admin_init', function () {
         'sanitize_callback' => 'PicPerf\validateCustomDomain',
         'default' => '',
     ]);
+
+    register_setting('picperf_settings', 'picperf_hide_proxied_domain', [
+        'type' => 'boolean',
+        'sanitize_callback' => 'rest_sanitize_boolean',
+        'default' => false,
+    ]);
 });
+
+/**
+ * Handle custom domain setting update
+ */
+add_filter('pre_update_option_picperf_custom_domain', function ($newValue) {
+    $associatedDomain = CustomDomainService::checkForAssociatedDomain($newValue);
+
+    update_option('picperf_associated_proxied_domain', $associatedDomain ?? '');
+
+    return $newValue;
+}, 10, 2);
 
 /**
  * Validate custom domain setting
@@ -138,11 +155,11 @@ function renderSettingsPage()
 
                     <div class="form-field">
                         <label for="picperf_custom_domain"><strong>Custom Domain</strong></label>
-                        <input 
-                            type="text" 
-                            id="picperf_custom_domain" 
-                            name="picperf_custom_domain" 
-                            value="<?php echo esc_attr(get_option('picperf_custom_domain', '')); ?>" 
+                        <input
+                            type="text"
+                            id="picperf_custom_domain"
+                            name="picperf_custom_domain"
+                            value="<?php echo esc_attr(get_option('picperf_custom_domain', '')); ?>"
                             class="regular-text"
                             placeholder="cdn.your-domain.com"
                             style="margin-top: 8px; width: 100%; max-width: 400px;"
@@ -151,6 +168,24 @@ function renderSettingsPage()
                             Only enter a domain if you've added one in the PicPerf dashboard and updated your DNS records. Learn more here. <a href="https://picperf.io/docs/custom-domain" target="_blank">Learn more here.</a>
                         </span>
                     </div>
+
+                    <?php if (Config::getAssociatedProxiedDomain()) { ?>
+                    <div class="form-field">
+                        <label for="picperf_hide_proxied_domain">
+                            <input
+                                type="checkbox"
+                                id="picperf_hide_proxied_domain"
+                                name="picperf_hide_proxied_domain"
+                                value="1"
+                                <?php checked(get_option('picperf_hide_proxied_domain', false)); ?>
+                            />
+                            <strong>Hide proxy domain?</strong>
+                        </label>
+                        <span class="picperf-description">
+                            It looks like you've associated a proxied domain with this custom domain. By checking this box, your image URLs won't include that proxied domain, simplifying them a bit. <a href="https://picperf.io/docs/custom-domain/invisible-proxy" target="_blank">Learn more here.</a>
+                        </span>
+                    </div>
+                    <?php } ?>
 
                     </div>
                     

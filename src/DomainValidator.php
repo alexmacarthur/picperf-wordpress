@@ -8,8 +8,6 @@ class DomainValidator
 
     private $transientName;
 
-    const REMOTE_HOST = 'https://go.picperf.io';
-
     const ONE_DAY_IN_SECONDS = 86400;
 
     public function __construct()
@@ -52,7 +50,7 @@ class DomainValidator
 
     private function rawValidation()
     {
-        $response = wp_remote_get(self::REMOTE_HOST.'/api/validate/domain/'.$this->domain);
+        $response = wp_remote_get(Config::REMOTE_HOST.'/api/validate/domain/'.$this->domain);
 
         if (is_wp_error($response)) {
             logError("Failed to validate domain: {$this->domain}");
